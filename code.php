@@ -20,7 +20,7 @@ function tb_chat_post($content) {
 	static $instance = 0;
 	$instance++;
 
-	if (has_post_format('chat')) {
+	if ( has_post_format('chat') && is_singular() ) {
 		remove_filter ('the_content',  'wpautop');
 		$chatoutput = '';
 		$split = preg_split("/(\r?\n)+|(<br\s*\/?>\s*)+/", $content);
