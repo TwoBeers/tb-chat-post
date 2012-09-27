@@ -1,0 +1,94 @@
+﻿.tb-chat .chat-select span {
+	cursor: pointer;
+	margin-left: 5px;
+}
+.tb-chat .chat-select span:hover {
+	opacity: .5;
+}
+.tb-chat .chat-select span.name {
+	cursor: inherit;
+	margin: 0;
+	font-weight: bold;
+}
+.tb-chat .chat-select span.name:hover {
+	opacity: 1;
+}
+.tb-chat .chat-select .hide {
+	display: inline;
+}
+.tb-chat .chat-select .hidden .hide {
+	display: none;
+}
+.tb-chat .chat-select .show {
+	display: none;
+}
+.tb-chat .chat-select .hidden .show {
+	display: inline;
+}
+.tb-chat .chat-select .toleft {
+	display: none;
+}
+.tb-chat .chat-select .rightalign .toleft {
+	display: inline;
+}
+.tb-chat .chat-select .toright {
+	display: inline;
+}
+.tb-chat .chat-select .rightalign .toright {
+	display: none;
+}
+.tb-chat .chat-transcript .rightalign {
+	text-align: right;
+}
+.tb-chat ul.chat-select li,
+.tb-chat ul.chat-transcript li {
+	list-style: none outside none;
+}
+.tb-chat .chat-transcript li {
+	border-top: 1px solid;
+}
+.tb-chat .chat-transcript li:first-child {
+	border-top: none;
+}
+.tb-chat ul.chat-select ,
+.tb-chat ul.chat-transcript {
+	margin: 0;
+	padding: 0;
+}
+.tb-chat ul.chat-select {
+	overflow: hidden;
+	margin-bottom: 30px;
+	display: none;
+}
+.tb-chat.animated .chat-select {
+	display: block;
+}
+.tb-chat .chat-select li {
+	border: 1px solid;
+	float: left;
+	list-style: none outside none;
+	margin-right: 10px;
+	padding: 0 5px;
+}
+.tb-chat .chat-select .rightalign {
+	float: right;
+}
+.tb-chat .chat-transcript .name {
+	font-weight: bold;
+	margin: 0 10px 0 0;
+	float: left
+}
+.tb-chat .chat-transcript .name:after {
+	content: ' »'
+}
+.tb-chat .chat-transcript .rightalign .name:after {
+	content: ''
+}
+.tb-chat .chat-transcript .rightalign .name:before {
+	content: '« '
+}
+.tb-chat .chat-transcript .rightalign .name {
+	margin: 0 0 0 10px;
+	float: right;
+}
+
