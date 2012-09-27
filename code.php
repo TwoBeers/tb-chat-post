@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: TB Chat Post
-Plugin URI:
+Plugin URI: https://github.com/TwoBeers/tb-chat-post
 Description: The plugin will take any content inside a chat-format post, automatically format it and apply a specific style and animation
 Author: Jimo
 Author URI: http://jimo.twbrs.net/
@@ -69,7 +69,7 @@ function tb_chat_js(){
 
 	if ( !$tb_chat_load_script ) return;
 
-	wp_enqueue_script( 'tb-chat-script', plugins_url('tb-chat/tb-chat.js'), array('jquery'), '', true );
+	wp_enqueue_script( 'tb-chat-script', plugins_url('tb-chat-post/tb-chat.js'), array('jquery'), '', true );
 
 	$data = array(
 		'animation' => in_array( $tb_chat_animation, array('slide','fade','none') ) ? $tb_chat_animation : 'none'
@@ -85,7 +85,7 @@ function tb_chat_css(){
 
 	if ( !$tb_chat_load_style ) return;
 
-	wp_enqueue_style( 'tb-chat-style', plugins_url('tb-chat/tb-chat.css'), false, '', 'screen' );
+	wp_enqueue_style( 'tb-chat-style', plugins_url('tb-chat-post/tb-chat.css'), false, '', 'screen' );
 
 }
 add_action( 'wp_enqueue_scripts', 'tb_chat_css' ); // Add css stylesheet
