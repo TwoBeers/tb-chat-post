@@ -18,31 +18,31 @@ tbChatScripts = {
 
 				var $selector = $(this);
 
-				$selector.data('chatter-id', $selector.attr('class'));
+				$selector.data('speaker-id', $selector.attr('class'));
 
-				var chatter_class = '#' + $chat.attr('id') + ' .chat-transcript .' + $selector.data('chatter-id');
+				var speaker_class = '#' + $chat.attr('id') + ' .chat-transcript .' + $selector.data('speaker-id');
 
 				$('.hide',$selector).click ( function() {
 
 					$selector.addClass('hidden');
-					$(chatter_class).addClass('hidden');
+					$(speaker_class).addClass('hidden');
 
 					if (effect == 'slide')
-						$(chatter_class).slideUp();
+						$(speaker_class).slideUp();
 					else if (effect == 'fade')
-						$(chatter_class).fadeOut();
+						$(speaker_class).fadeOut();
 
 				});
 
 				$('.show',$selector).click ( function() {
 
 					$selector.removeClass('hidden');
-					$(chatter_class).removeClass('hidden');
+					$(speaker_class).removeClass('hidden');
 
 					if (effect == 'slide')
-						$(chatter_class).slideDown();
+						$(speaker_class).slideDown();
 					else if (effect == 'fade')
-						$(chatter_class).fadeIn();
+						$(speaker_class).fadeIn();
 
 				});
 
@@ -50,7 +50,7 @@ tbChatScripts = {
 
 					$selector.removeClass('rightalign');
 
-					$(chatter_class).removeClass('rightalign');
+					$(speaker_class).removeClass('rightalign');
 
 				});
 
@@ -58,7 +58,7 @@ tbChatScripts = {
 
 					$selector.addClass('rightalign');
 
-					$(chatter_class).addClass('rightalign');
+					$(speaker_class).addClass('rightalign');
 
 				});
 

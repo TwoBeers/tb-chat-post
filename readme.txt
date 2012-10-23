@@ -3,8 +3,8 @@ Contributors: tbcrew
 Tags: chat
 Requires at least: 3.0.1
 Tested up to: 3.4
-Stable tag: 1.0
-License: GPLv2 or later
+Stable tag: 1.2
+License: GNU General Public License, version 2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Styles the content of chat-format posts.
@@ -22,9 +22,15 @@ The plugin will take any content inside a chat-format post, automatically format
 
 = Does it have an admin page where to set some options? =
 
-Nop! If you want to change something, you have to edit the files (usually tb-chat.php).
+Nop! If you want to change something, you have to edit the files (usually code.php).
 
 == Changelog ==
+
+= 1.2 =
+* renamed/added some classes
+
+= 1.1 =
+* add post-format 'chat' support (for themes that don't support). source http://wordpress.stackexchange.com/questions/23839/using-add-theme-support-inside-a-plugin
 
 = 1.0 =
 * first release.

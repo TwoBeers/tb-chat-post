@@ -5,7 +5,7 @@ Plugin URI: https://github.com/TwoBeers/tb-chat-post
 Description: The plugin will take any content inside a chat-format post, automatically format it and apply a specific style and animation
 Author: Jimo
 Author URI: http://jimo.twbrs.net/
-Version: 1.0
+Version: 1.2
 License: GNU General Public License, version 2
 License URI: http: //www.gnu.org/licenses/gpl-2.0.html
 */
@@ -13,6 +13,20 @@ License URI: http: //www.gnu.org/licenses/gpl-2.0.html
 $tb_chat_load_style = true; // options: true, false
 $tb_chat_load_script = true; // options: true, false
 $tb_chat_animation = 'slide'; // options: 'slide', 'fade', 'none'
+
+add_action( 'after_setup_theme', 'tb_chat_setup', 11 ); // tell WordPress to run tb_chat_setup() when the 'after_setup_theme' hook is run.
+
+function tb_chat_setup(){
+	$supportedTypes = get_theme_support( 'post-formats' );
+
+	if( $supportedTypes === false )
+		add_theme_support( 'post-formats', 'chat' );
+	elseif( is_array( $supportedTypes ) )
+		{
+			$supportedTypes[0][] = 'chat';
+			add_theme_support( 'post-formats', $supportedTypes[0] );
+		}
+}
 
 function tb_chat_post($content) {
 	global $post;
@@ -24,37 +38,37 @@ function tb_chat_post($content) {
 		remove_filter ('the_content',  'wpautop');
 		$chatoutput = '';
 		$split = preg_split("/(\r?\n)+|(<br\s*\/?>\s*)+/", $content);
-		$chatters = array();
+		$speakers = array();
 		$row_class_ov = 'odd';
 		foreach($split as $haystack) {
 			if (strpos($haystack, ':')) {
 				$string = explode(':', trim($haystack), 2);
 				$who = strip_tags(trim($string[0]));
-				if ( !in_array( $who, $chatters ) ) {
-					$chatters[] = $who;
-					$chatter_key = count( $chatters );
+				if ( !in_array( $who, $speakers ) ) {
+					$speakers[] = $who;
+					$speaker_key = count( $speakers );
 				} else {
-					$chatter_key = array_search( $who, $chatters ) + 1;
+					$speaker_key = array_search( $who, $speakers ) + 1;
 				}
 				$what = strip_tags(trim($string[1]));
 				$row_class_ov = ( $row_class_ov == 'even' )? 'odd' : 'even';
-				$row_class = $row_class_ov . ' chatter-' . $chatter_key;
-				$chatoutput = $chatoutput . "<li class=\"$row_class\"><span class=\"name\">$who</span>$what</li>";
+				$row_class = $row_class_ov . ' speaker-' . $speaker_key;
+				$chatoutput = $chatoutput . "<li class=\"$row_class\"><span class=\"name\">$who</span><span class=\"text\">$what</span></li>";
 			} else {
 				// the string didn't contain a needle. Displaying anyway in case theres anything additional you want to add within the transcript
-				$chatoutput = $chatoutput . '<li>' . $haystack . '</li>';
+				$chatoutput = $chatoutput . '<li class="aside-text">' . $haystack . '</li>';
 			}
 		}
-		$chatters_select = '';
-		foreach ($chatters as $key => $chatter) {
+		$speakers_select = '';
+		foreach ($speakers as $key => $speaker) {
 			$key = $key + 1;
-			$chatters_select = $chatters_select . "<li class=\"chatter-$key\"><span class=\"name\">$chatter</span><span class=\"hide\">[-]</span><span class=\"show\">[+]</span><span class=\"toleft\">[&lt;]</span><span class=\"toright\">[&gt;]</span></li> ";
+			$speakers_select = $speakers_select . "<li class=\"speaker-$key\"><span class=\"name\">$speaker</span><span class=\"hide\">[-]</span><span class=\"show\">[+]</span><span class=\"toleft\">[&lt;]</span><span class=\"toright\">[&gt;]</span></li> ";
 		}
-		$chatters_select = '<ul class="chat-select">' . $chatters_select . '</ul>';
-		$chat_before = '<ul class="chat-transcript' . ' chatters-' . count( $chatters ) . '">';
+		$speakers_select = '<ul class="chat-select">' . $speakers_select . '</ul>';
+		$chat_before = '<ul class="chat-transcript' . ' speakers-' . count( $speakers ) . '">';
 		$chat_after = '</ul>';
 		// print our new formated chat post
-		$content = '<div id="chat-' . $instance . '" class="tb-chat">' . $chatters_select . $chat_before . $chatoutput . $chat_after . '</div>';
+		$content = '<div id="chat-' . $instance . '" class="tb-chat">' . $speakers_select . $chat_before . $chatoutput . $chat_after . '</div>';
 		return $content;
 	} else {
 		add_filter ('the_content',  'wpautop');

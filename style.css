@@ -54,6 +54,7 @@
 .tb-chat ul.chat-transcript {
 	margin: 0;
 	padding: 0;
+	line-height: 2em;
 }
 .tb-chat ul.chat-select {
 	overflow: hidden;
@@ -91,4 +92,3 @@
 	margin: 0 0 0 10px;
 	float: right;
 }
-
