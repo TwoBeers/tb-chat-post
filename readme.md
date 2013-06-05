@@ -1,4 +1,4 @@
-#Plugin Name
+#TB Chat Post
 Contributors: tbcrew  
 Tags: chat  
 Requires at least: 3.0.1  
