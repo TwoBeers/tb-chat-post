@@ -10,15 +10,14 @@ License: GNU General Public License, version 2
 License URI: http: //www.gnu.org/licenses/gpl-2.0.html
 */
 
-$tb_chat_load_style = true; // options: true, false
-$tb_chat_load_script = true; // options: true, false
-$tb_chat_animation = 'slide'; // options: 'slide', 'fade', 'none'
-
-add_action( 'after_setup_theme', 'tb_chat_setup', 11 ); // tell WordPress to run tb_chat_setup() when the 'after_setup_theme' hook is run.
-
 function tb_chat_setup(){
-	$supportedTypes = get_theme_support( 'post-formats' );
+	global $tb_chat_animation, $tb_chat_load_script, $tb_chat_load_style;
 
+	$tb_chat_load_style = apply_filters( 'tb_chat_load_style', true ); // options: true, false
+	$tb_chat_load_script = apply_filters( 'tb_chat_load_script', true ); // options: true, false
+	$tb_chat_animation = apply_filters( 'tb_chat_animation', 'slide' ); // options: 'slide', 'fade', 'none'
+
+	$supportedTypes = get_theme_support( 'post-formats' );
 	if( $supportedTypes === false )
 		add_theme_support( 'post-formats', 'chat' );
 	elseif( is_array( $supportedTypes ) )
@@ -27,6 +26,7 @@ function tb_chat_setup(){
 			add_theme_support( 'post-formats', $supportedTypes[0] );
 		}
 }
+add_action( 'after_setup_theme', 'tb_chat_setup', 11 ); // tell WordPress to run tb_chat_setup() when the 'after_setup_theme' hook is run.
 
 function tb_chat_post($content) {
 	global $post;
@@ -34,13 +34,26 @@ function tb_chat_post($content) {
 	static $instance = 0;
 	$instance++;
 
-	if ( has_post_format('chat') && is_singular() ) {
+	if ( has_post_format('chat') && is_singular() && in_the_loop() ) {
 		remove_filter ('the_content',  'wpautop');
+		$content = strip_tags( trim( $content ) );
 		$chatoutput = '';
 		$split = preg_split("/(\r?\n)+|(<br\s*\/?>\s*)+/", $content);
 		$speakers = array();
 		$row_class_ov = 'odd';
 		foreach($split as $haystack) {
+			$timestamp = '';
+			$haystack = str_replace('&#8211;', "-", $haystack);
+
+			if(preg_match('(^[0-9:]+)', $haystack, $regs)) {
+				//echo $regs[0] . '<br />';
+				$string = explode('-', trim($haystack), 2);
+				if (isset($string[1]))
+					$haystack = $string[1];
+				if (isset($string[0]))
+					$timestamp = $string[0];
+			}
+
 			if (strpos($haystack, ':')) {
 				$string = explode(':', trim($haystack), 2);
 				$who = strip_tags(trim($string[0]));
@@ -50,10 +63,15 @@ function tb_chat_post($content) {
 				} else {
 					$speaker_key = array_search( $who, $speakers ) + 1;
 				}
-				$what = strip_tags(trim($string[1]));
+				$what = make_clickable(strip_tags(trim($string[1])));
 				$row_class_ov = ( $row_class_ov == 'even' )? 'odd' : 'even';
-				$row_class = $row_class_ov . ' speaker-' . $speaker_key;
-				$chatoutput = $chatoutput . "<li class=\"$row_class\"><span class=\"name\">$who</span><span class=\"text\">$what</span></li>";
+				$row_class = $row_class_ov . ' speaker speaker-' . $speaker_key;
+
+				$who = "<span class=\"name\">$who</span>";
+				$what = "<span class=\"text\">$what</span>";
+				$timestamp = $timestamp ? "<span class=\"timestamp\">$timestamp</span>" : '';
+
+				$chatoutput = $chatoutput . "<li class=\"$row_class\">$timestamp $who $what</li>";
 			} else {
 				// the string didn't contain a needle. Displaying anyway in case theres anything additional you want to add within the transcript
 				$chatoutput = $chatoutput . '<li class="aside-text">' . $haystack . '</li>';
@@ -75,7 +93,7 @@ function tb_chat_post($content) {
 		return $content;
 	}
 }
-add_filter( "the_content", "tb_chat_post", 9);
+add_filter( "the_content", "tb_chat_post");
 
 // add scripts
 function tb_chat_js(){
@@ -97,9 +115,8 @@ add_action( 'wp_enqueue_scripts', 'tb_chat_js' ); // Add js scripts
 function tb_chat_css(){
 	global $tb_chat_load_style;
 
-	if ( !$tb_chat_load_style ) return;
-
-	wp_enqueue_style( 'tb-chat-style', plugins_url('tb-chat-post/style.css'), false, '', 'screen' );
+	if ( $tb_chat_load_style )
+		wp_enqueue_style( 'tb-chat-style', plugins_url('tb-chat-post/style.css'), false, '', 'screen' );
 
 }
 add_action( 'wp_enqueue_scripts', 'tb_chat_css' ); // Add css stylesheet

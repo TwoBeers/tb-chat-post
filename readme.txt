@@ -1,9 +1,9 @@
-=== Plugin Name ===
+=== TB Chat Post ===
 Contributors: tbcrew
 Tags: chat
 Requires at least: 3.0.1
 Tested up to: 3.4
-Stable tag: 1.2
+Stable tag: 1.3
 License: GNU General Public License, version 2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,9 @@ The plugin will take any content inside a chat-format post, automatically format
 Nop! If you want to change something, you have to edit the files (usually code.php).
 
 == Changelog ==
+
+= 1.3 =
+* added support for "whatsapp" chat transcript (format `hh:mm d m - %name%: %text%`).
 
 = 1.2 =
 * renamed/added some classes
